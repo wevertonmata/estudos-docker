@@ -1,0 +1,32 @@
+version: '3.3'
+
+services:
+  db: #Container MySQL
+    build: ./mysql/
+    volumes:
+      - db_data:/var/lib/mysql #declaracao de volume
+    restart: always #sempre que a tiver alteracao ela vai ser atualizada
+    env_file:
+      - ./config/db.env
+    ports:
+      - "3306:3306"
+    networks:
+      - dockercompose
+
+  backend:
+    depends_on: #dependencia de container
+      - db
+    build: ./flask/
+    ports:
+      - "5000:5000"
+    restart: always
+    networks:
+      - dockercompose
+
+volumes:
+  db_data: {}
+networks:
+  dockercompose: 
+
+# docker build -t flaskcompose .
+# docker build -t mysqlcompose .

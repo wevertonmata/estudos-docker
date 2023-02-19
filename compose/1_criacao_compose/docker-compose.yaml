@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  db: #Container MySQL
+    image: mysql:5.7 #FROM mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql #declaracao de volume
+    restart: always #sempre que a tiver alteracao ela vai ser atualizada
+    environment:    
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wever
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+
+
+  wordpress: #Container wordpress
+    depends_on: #dependencia de container
+      - db
+    image: wordpress:latest #FROM wordpress:latest
+    ports:
+      - "8000:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wever
+      WORDPRESS_DB_PASSWORD: root
+      WORDPRESS_DB_NAME: wordpress
+volumes:
+  db_data: {}
